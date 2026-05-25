@@ -473,28 +473,50 @@ const ALL_SCH = {
     ndays: 31,
     firstDow: 5, // 1 Mei 2026 = Jumat = 5
     data: {
-      "Sutio":                [,"L","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","L","S","S","L","L"],
-      "Abdur Rahman":         [,"L","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","L","S","S","L","L"],
-      "Aqila Shifa Bilbina H":[,"L","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","L","S","S","L","L"],
-      "Annisa Aziziyah":      [,"L","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","L","S","S","L","L"],
-      "Nadia Wahyu R":        [,"L","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","L","S","S","L","L"],
-      "Ummu Aiman Zakia K":   [,"L","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","L","S","S","L","L"],
+      // Baris PDF: L L L S S S S S L L S S S L S L L S S S S S L L S S L L S L L
+      "Sutio":                [,"L","L","L","S","S","S","S","S","L","L","S","S","S","L","S","L","L","S","S","S","S","S","L","L","S","S","L","L","S","L","L"],
+      // Baris PDF: L L L S S S S S L L S S S L L L L S S S S S L S S S L L L L L
+      "Abdur Rahman":         [,"L","L","L","S","S","S","S","S","L","L","S","S","S","L","L","L","L","S","S","S","S","S","L","S","S","S","L","L","L","L","L"],
+      // Baris PDF: L L L S S S S S L L S S S L S L L S S S S S L L S S M P L L L
+      "Aqila Shifa Bilbina H":[,"L","L","L","S","S","S","S","S","L","L","S","S","S","L","S","L","L","S","S","S","S","S","L","L","S","S","M","P","L","L","L"],
+      // Baris PDF: L L L S S S S S L L S S S L S L L S S S S S L L S S M P L L L
+      "Annisa Aziziyah":      [,"L","L","L","S","S","S","S","S","L","L","S","S","S","L","S","L","L","S","S","S","S","S","L","L","S","S","M","P","L","L","L"],
+      // Baris PDF: L L L S S S S S L L S S S L S L L S S S S S L L S S M P L L L
+      "Nadia Wahyu R":        [,"L","L","L","S","S","S","S","S","L","L","S","S","S","L","S","L","L","S","S","S","S","S","L","L","S","S","M","P","L","L","L"],
+      // Baris PDF: L L L S S S S S L L S S S L S L L S S S S S L L S S M P L L L
+      "Ummu Aiman Zakia K":   [,"L","L","L","S","S","S","S","S","L","L","S","S","S","L","S","L","L","S","S","S","S","S","L","L","S","S","M","P","L","L","L"],
+      // Baris PDF: P L M S P L M S P L M S P L M S P L M S P L M S P L M S P L M
       "Agil Yurendi":         [,"P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M"],
-      "Sulaiman":             [,"M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P"],
-      "Saleh Alkabiir":       [,"L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S"],
+      // Baris PDF: M S P L M S P L M S P M M L P L M S P L M S P L M S L L M S P
+      "Sulaiman":             [,"M","S","P","L","M","S","P","L","M","S","P","M","M","L","P","L","M","S","P","L","M","S","P","L","M","S","L","L","M","S","P"],
+      // Baris PDF: L M S P L M P P L M S P L M S P L M S P L M S P L M S P L M S
+      "Saleh Alkabiir":       [,"L","M","S","P","L","M","P","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S","P","L","M","S"],
+      // Baris PDF: M P S L M P S L M P S L M P S L M P S L M P S L M P S L M P S
       "M. Amin Fauzan":       [,"M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S"],
-      "Dewantara":            [,"M","P","S","L","M","P","S","M","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S"],
+      // Baris PDF: M P S L M P S M M P S L M P S L M P S L M P S L M P L M M P S
+      "Dewantara":            [,"M","P","S","L","M","P","S","M","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","L","M","M","P","S"],
+      // Baris PDF: M P S L M P S L M P S L M P S L M P S L M P S L M P S L M P S
       "Dwi Sapto Widodo":     [,"M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S"],
-      "Rendi Dwi Yulian":     [,"P","S","L","M","P","P","L","L","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","P"],
-      "M. Bagoes Irwandi":    [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      // Baris PDF: P S L M P P L L P S L M P S L M P S L M P S L M P S P M P S P
+      "Rendi Dwi Yulian":     [,"P","S","L","M","P","P","L","L","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","P","M","P","S","P"],
+      // Baris PDF: P S L M P S L M P S L M P S L M P S L M P S L M P S P L P S L
+      "M. Bagoes Irwandi":    [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","P","L","P","S","L"],
+      // Baris PDF: P S L M P S L M P S L M P S L M P S L M P S L M P S L M P S L
       "Belbi Candra":         [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      // Baris PDF: S L M P S L M P S L M P S L M P S L M P S L M P S L M P S L M
       "Shafiyah Fabiaty":     [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M"],
+      // Baris PDF: S L M P S L M P S L M P S L M P S L M P S L M P S L M P S L M
       "Siwi Asri Hanifah":    [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M"],
+      // Baris PDF: S L M P S S L L S L M P S L M P S L M P S L M P S L M P S L M
       "Winda Andea Utami":    [,"S","L","M","P","S","S","L","L","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M"],
+      // Baris PDF: S L M P S L M P S L M P S L M P S L M P S L M P S L M P S L M
       "Widia Salsabila":      [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M"],
+      // Baris PDF: L M P S L M P S L M P S L M P S L M P S L M P S L M P S L M P
       "Ali Usman":            [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
+      // Baris PDF: L M P S L M P S L M P S L M P S L M P S L M P S L M P S L M P
       "M. Febriansyah":       [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
-      "Ricki Ramdani":        [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
+      // Baris PDF: L M P S L M P S L M P S L M P S L M P S L M P S L M S S L M P
+      "Ricki Ramdani":        [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","S","S","L","M","P"],
     }
   },
   // ---------- JUNI 2026 ----------

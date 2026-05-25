@@ -13,6 +13,7 @@
   --P:#4caf50;--P-bg:#0a1e0c;--S:#f5c542;--S-bg:#1e1800;--M:#4890e8;--M-bg:#071428;
   --DL-bg:#1a0a30;--DL:#b060f0;--C-bg:#1e0808;--C:#e05050;
   --L-bg:#111122;--red:#e05050;--toggle-bg:#1a1a40;--toggle-knob:#4a4acc;
+  --dot-color:rgba(74,74,204,0.13);
 }
 :root[data-theme="light"]{
   --bg:#f0f2fb;--bg2:#ffffff;--bg3:#e8eaf6;--border:#d0d4ee;--border2:#b0b8e0;
@@ -21,11 +22,35 @@
   --P:#2e7d32;--P-bg:#e8f5e9;--S:#e65100;--S-bg:#fff3e0;--M:#1565c0;--M-bg:#e3f2fd;
   --DL-bg:#f3e5f5;--DL:#7b1fa2;--C-bg:#fce4ec;--C:#c62828;
   --L-bg:#f5f5f5;--red:#c62828;--toggle-bg:#c8ccee;--toggle-knob:#3a3acc;
+  --dot-color:rgba(58,58,204,0.09);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;transition:background .25s,color .25s;}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background-image:
+    radial-gradient(circle, var(--dot-color) 1.2px, transparent 1.2px);
+  background-size:28px 28px;
+  background-position:0 0;
+}
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(var(--dot-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--dot-color) 1px, transparent 1px);
+  background-size:140px 140px;
+  background-position:14px 14px;
+  opacity:0.4;
+}
 .hidden{display:none!important;}
-
 .page{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:14px 18px 22px;}
 
 /* HEADER */
@@ -237,6 +262,10 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Mei 2026
       </button>
+      <button class="pdf-btn" onclick="openPdf('2026-6')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Juni 2026
+      </button>
     </div>
   </div>
 
@@ -352,6 +381,34 @@ const ALL_SCH = {
       "M. Febriansyah":       [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
       "Ricki Ramdani":        [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
     }
+  },
+  // ---------- JUNI 2026 ----------
+  "2026-6": {
+    ndays: 30,
+    firstDow: 1, // 1 Juni 2026 = Senin = 1
+    data: {
+      "Sutio":                [,"L","S","S","S","S","L","L","S","S","S","S","S","L","L","S","L","S","S","S","L","L","S","S","S","S","S","L","L","S","S"],
+      "Abdur Rahman":         [,"L","S","S","S","S","L","L","S","S","S","S","S","L","L","S","L","S","S","S","L","L","S","S","S","S","S","L","L","S","S"],
+      "M. Febriansyah":       [,"M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","S","L","P","S","L","M","P","P","L","M","P"],
+      "Nadia Wahyu R":        [,"M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
+      "Widia Salsabila":      [,"M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
+      "Dwi Sapto Widodo":     [,"M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","P","L","M","P"],
+      "M. Bagoes Irwandi":    [,"M","P","S","L","M","P","S","L","M","P","P","L","M","P","P","L","M","P","P","L","M","P","P","L","M","P","S","L","M","P"],
+      "Saleh Alkabiir":       [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","S"],
+      "Aqila Shifa Bilbina H":[,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S"],
+      "Winda Andea Utami":    [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","L","L","M","P","S","L","M","P","S","L","M","P","S"],
+      "Belbi Candra":         [,"P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S"],
+      "Ricki Ramdani":        [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","P"],
+      "Agil Yurendi":         [,"S","S","S","S","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      "Shafiyah Fabiaty":     [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      "Annisa Aziziyah":      [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      "M. Amin Fauzan":       [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L"],
+      "Dewantara":            [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","S","L"],
+      "Siwi Asri Hanifah":    [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M"],
+      "Ummu Aiman Zakia K":   [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M"],
+      "Ali Usman":            [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","S","L","M"],
+      "Rendi Dwi Yulian":     [,"L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M"],
+    }
   }
 };
 
@@ -360,6 +417,10 @@ const HOLIDAYS = {
   "2026-5": {
     1:"Hari Buruh", 14:"Kenaikan Isa Al-Masih", 15:"Cuti Bersama",
     27:"Iduladha 1447H", 28:"Cuti Bersama", 31:"Hari Raya Waisak"
+  },
+  "2026-6": {
+    1:"Hari Lahir Pancasila",
+    16:"Tahun Baru Islam 1448H"
   }
 };
 
@@ -373,7 +434,7 @@ let viewYear = now.getFullYear();
 let viewMonth = now.getMonth()+1;
 
 // Clamp to available months
-const AVAIL = ["2026-4","2026-5"];
+const AVAIL = ["2026-4","2026-5","2026-6"];
 function clampMonth(){
   const key=`${viewYear}-${viewMonth}`;
   if(!AVAIL.includes(key)){
@@ -613,10 +674,12 @@ document.getElementById('modal-ov').addEventListener('click',e=>{if(e.target===d
 const PDF_FILES = {
   "2026-4": "jadwal-april-2026.pdf",   // ← ganti nama sesuai file PDF Anda
   "2026-5": "jadwal-mei-2026.pdf",     // ← ganti nama sesuai file PDF Anda
+  "2026-6": "jadwal-juni-2026.pdf",    // ← file PDF Juni (upload ke repo dengan nama ini)
 };
 const PDF_LABELS = {
   "2026-4":"Jadwal April 2026",
-  "2026-5":"Jadwal Mei 2026"
+  "2026-5":"Jadwal Mei 2026",
+  "2026-6":"Jadwal Juni 2026"
 };
 function openPdf(key){
   const path=PDF_FILES[key]||'';

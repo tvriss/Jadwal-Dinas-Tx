@@ -143,19 +143,34 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
     radial-gradient(ellipse 30% 50% at 50% 100%, rgba(30,60,180,0.07) 0%, transparent 50%);
 }
 
-/* LIGHT mode tri-day panel: subtle rotated squares (referensi gambar 1) */
+/* Dark panel honeycomb gold overlay */
+[data-theme="dark"] .today-panel::after,
+[data-theme="dark"] .tri-day-panel::after{
+  content:'';position:absolute;inset:0;pointer-events:none;border-radius:10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='48'%3E%3Cpath d='M28 2 L50 14 L50 34 L28 46 L6 34 L6 14 Z' fill='none' stroke='rgba(201%2C168%2C76%2C0.1)' stroke-width='1'/%3E%3Cpath d='M0 14 L6 14 M50 14 L56 14 M0 34 L6 34 M50 34 L56 34' fill='none' stroke='rgba(201%2C168%2C76%2C0.07)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 56px 48px;
+}
+
+/* LIGHT mode panel: honeycomb SVG pattern */
 [data-theme="light"] .today-panel::before,
 [data-theme="light"] .tri-day-panel::before{
   content:'';position:absolute;inset:0;pointer-events:none;border-radius:10px;
-  background-image:
-    repeating-linear-gradient(45deg,transparent,transparent 18px,rgba(58,58,180,0.035) 18px,rgba(58,58,180,0.035) 19px),
-    repeating-linear-gradient(-45deg,transparent,transparent 18px,rgba(58,58,180,0.025) 18px,rgba(58,58,180,0.025) 19px);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='48'%3E%3Cpath d='M28 2 L50 14 L50 34 L28 46 L6 34 L6 14 Z' fill='none' stroke='rgba(58%2C58%2C180%2C0.12)' stroke-width='1'/%3E%3Cpath d='M0 14 L6 14 M50 14 L56 14 M0 34 L6 34 M50 34 L56 34' fill='none' stroke='rgba(58%2C58%2C180%2C0.08)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 56px 48px;
+  opacity:1;
 }
-.panel-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
-.today-num{font-family:'Space Mono',monospace;font-size:48px;font-weight:700;color:var(--text2);line-height:1;}
-.today-day{font-size:12px;color:var(--text2);margin-top:2px;}
-.today-month{font-size:10px;color:var(--text3);}
-.no-schedule{font-size:11px;color:var(--text3);line-height:1.6;margin-top:6px;}
+
+/* Light cal-day: honeycomb kecil */
+[data-theme="light"] .cal-day::before{
+  content:'';position:absolute;inset:0;pointer-events:none;border-radius:7px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='24'%3E%3Cpath d='M14 1 L25 7 L25 17 L14 23 L3 17 L3 7 Z' fill='none' stroke='rgba(58%2C58%2C180%2C0.1)' stroke-width='0.8'/%3E%3C/svg%3E");
+  background-size: 28px 24px;
+}
+.panel-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;position:relative;z-index:1;}
+.today-num{font-family:'Space Mono',monospace;font-size:48px;font-weight:700;color:var(--text2);line-height:1;position:relative;z-index:1;}
+.today-day{font-size:12px;color:var(--text2);margin-top:2px;position:relative;z-index:1;}
+.today-month{font-size:10px;color:var(--text3);position:relative;z-index:1;}
+.no-schedule{font-size:11px;color:var(--text3);line-height:1.6;margin-top:6px;position:relative;z-index:1;}
 
 /* CONTROLS BAR (month nav + pdf) between top panel and calendar */
 .controls-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 10px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;flex-wrap:wrap;}
@@ -194,15 +209,14 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 /* Light cal-day: subtle diamond/square texture (referensi gambar 1) */
 [data-theme="light"] .cal-day::before{
   content:'';position:absolute;inset:0;pointer-events:none;border-radius:7px;
-  background-image:
-    repeating-linear-gradient(45deg,transparent,transparent 9px,rgba(58,58,180,0.03) 9px,rgba(58,58,180,0.03) 10px),
-    repeating-linear-gradient(-45deg,transparent,transparent 9px,rgba(58,58,180,0.02) 9px,rgba(58,58,180,0.02) 10px);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='24'%3E%3Cpath d='M14 1 L25 7 L25 17 L14 23 L3 17 L3 7 Z' fill='none' stroke='rgba(58%2C58%2C180%2C0.1)' stroke-width='0.8'/%3E%3C/svg%3E");
+  background-size: 28px 24px;
 }
-/* Dark cal-day: subtle gold diagonal (referensi gambar 3) */
+/* Dark cal-day: honeycomb gold (referensi gambar 3) */
 [data-theme="dark"] .cal-day::before{
   content:'';position:absolute;inset:0;pointer-events:none;border-radius:7px;
-  background-image:
-    repeating-linear-gradient(-45deg,transparent,transparent 16px,rgba(201,168,76,0.04) 16px,rgba(201,168,76,0.04) 17px);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='24'%3E%3Cpath d='M14 1 L25 7 L25 17 L14 23 L3 17 L3 7 Z' fill='none' stroke='rgba(201%2C168%2C76%2C0.09)' stroke-width='0.8'/%3E%3C/svg%3E");
+  background-size: 28px 24px;
 }
 [data-theme="dark"] .cal-day{background:#0c0c1e;border-color:#181830;}
 [data-theme="dark"] .cal-day:hover{border-color:rgba(201,168,76,0.25);background:#0f0f24;}
@@ -230,7 +244,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 
 /* TRI-DAY PANEL (H-1 / Today / H+1) - unified single panel */
 .tri-day-panel{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 14px;box-shadow:0 2px 12px var(--shadow);position:relative;overflow:hidden;}
-.tri-day-grid{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:0;margin-top:6px;height:calc(100% - 26px);}
+.tri-day-grid{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:0;margin-top:6px;height:calc(100% - 26px);position:relative;z-index:1;}
 .tdc{padding:10px 12px;border-top:2px solid var(--border2);position:relative;}
 .tdc+.tdc{border-left:1px solid var(--border);}
 .tdc.tdc-today{background:var(--bg3);border-top-color:var(--toggle-knob);border-radius:8px;}

@@ -384,6 +384,10 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Juni 2026
       </button>
+      <button class="pdf-btn" onclick="openPdf('2026-7')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Juli 2026
+      </button>
     </div>
   </div>
 
@@ -436,7 +440,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 <script>
 // ===================== DATA =====================
 // Versi data: v2 — Update Mei 2026 sesuai PDF 25 April 2026
-const DATA_VERSION = "v2-mei2026-updated";
+const DATA_VERSION = "v3-juni-updated-juli-added";
 const ALL_SCH = {
   // ---------- APRIL 2026 ----------
   "2026-4": {
@@ -524,32 +528,102 @@ const ALL_SCH = {
       "Ricki Ramdani":        [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","S","S","L","M","P"],
     }
   },
-  // ---------- JUNI 2026 ----------
+  // ---------- JUNI 2026 (updated) ----------
   "2026-6": {
     ndays: 30,
     firstDow: 1, // 1 Juni 2026 = Senin = 1
     data: {
-      "Sutio":                [,"L","S","S","S","S","L","L","S","S","S","S","S","L","L","S","L","S","S","S","L","L","S","S","S","S","S","L","L","S","S"],
+      // L S S S DL DL L S S S S S L L S L S S S L L S S S S S L L S S
+      "Sutio":                [,"L","S","S","S","DL","DL","L","S","S","S","S","S","L","L","S","L","S","S","S","L","L","S","S","S","S","S","L","L","S","S"],
+      // L S S S S L L S S S S S L L S L S S S L L S S S S S L L S S
       "Abdur Rahman":         [,"L","S","S","S","S","L","L","S","S","S","S","S","L","L","S","L","S","S","S","L","L","S","S","S","S","S","L","L","S","S"],
+      // M P S L M P S L M P P L M P S L M P P S L P S L M P P L M P
       "M. Febriansyah":       [,"M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","S","L","P","S","L","M","P","P","L","M","P"],
+      // M P S L M P S L M P S L M P S L M P S L M P S L M P S L M P
       "Nadia Wahyu R":        [,"M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
+      // M P S L M P S L M P S L M P S L M P S L M P S L M P S L M P
       "Widia Salsabila":      [,"M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
-      "Dwi Sapto Widodo":     [,"M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","P","L","M","P"],
-      "M. Bagoes Irwandi":    [,"M","P","S","L","M","P","S","L","M","P","P","L","M","P","P","L","M","P","P","L","M","P","P","L","M","P","S","L","M","P"],
-      "Saleh Alkabiir":       [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","S"],
+      // M P S L M P S L M P S L M P P L M P P L M P P L M P S L M P
+      "Dwi Sapto Widodo":     [,"M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","P","L","M","P","P","L","M","P","S","L","M","P"],
+      // M P S L M P S L M P P L M P P L M P S P M P S L M P P L M L
+      "M. Bagoes Irwandi":    [,"M","P","S","L","M","P","S","L","M","P","P","L","M","P","P","L","M","P","S","P","M","P","S","L","M","P","P","L","M","L"],
+      // S S L M P S L M P S L M P S L M P S L M P P L M P P L M P S
+      "Saleh Alkabiir":       [,"S","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","P","L","M","P","S"],
+      // P S L M P S L M P S L M P S L M P S L M P S L M P S L M P S
       "Aqila Shifa Bilbina H":[,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S"],
+      // P S L M P S L M P S L M P S L M P L L M P S L M P S L M P S
       "Winda Andea Utami":    [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","L","L","M","P","S","L","M","P","S","L","M","P","S"],
-      "Belbi Candra":         [,"P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S"],
-      "Ricki Ramdani":        [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","P"],
-      "Agil Yurendi":         [,"S","S","S","S","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      // P S L M P S L M P S L M P P L M P S L M P S L M P P L L M P
+      "Belbi Candra":         [,"P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","P","L","L","M","P"],
+      // P S L M P S L M P S L M P S L M P P L M P S P L C C C C C C
+      "Ricki Ramdani":        [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","P","L","C","C","C","C","C","C"],
+      // S S S S S L M P S DL DL DL DL L M P S L M L L L M P P L M P S P
+      "Agil Yurendi":         [,"S","S","S","S","S","L","M","P","S","DL","DL","DL","DL","L","M","P","S","L","M","L","L","L","M","P","P","L","M","P","S","P"],
+      // S L M P S L M P S L M P S L M P S L M P S L M P S L M P S L
       "Shafiyah Fabiaty":     [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      // S L M P S L M P S L M P S L M P S L M P S L M P S L M P S L
       "Annisa Aziziyah":      [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      // S L M P S L M P S L M P S L M P S L M P P L M P S L M P P L
       "M. Amin Fauzan":       [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L"],
-      "Dewantara":            [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","S","L"],
+      // S L M P S L M P S L M P S L M P P L M P S L M P P L M P P L
+      "Dewantara":            [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","P","L"],
+      // L M P S L M P S L M P S L M P S L M P S L M P S L M P S L M
       "Siwi Asri Hanifah":    [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M"],
+      // L M P S L M P S L M P S L M P S L M P S L M P S L M P S L M
       "Ummu Aiman Zakia K":   [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M"],
+      // L M P S L M P S L M P S L M P P L M P S L M P P L M P S L M
       "Ali Usman":            [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","S","L","M"],
-      "Rendi Dwi Yulian":     [,"L","M","P","S","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M"],
+      // L M P S L M P S L M M P L M P S L M P P L M P S L M P L M L
+      "Rendi Dwi Yulian":     [,"L","M","P","S","L","M","P","S","L","M","M","P","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","L","M","L"],
+    }
+  },
+  // ---------- JULI 2026 ----------
+  "2026-7": {
+    ndays: 31,
+    firstDow: 3, // 1 Juli 2026 = Rabu = 3
+    data: {
+      // S S S L L S S S S S L L S S S S S L L S S S S S L L S S S S S
+      "Sutio":                [,"S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S"],
+      // S S S L L S S S S S L L S S S S S L L S S S S S L L S S S S S
+      "Abdur Rahman":         [,"S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S","L","L","S","S","S","S","S"],
+      // M P P L M P P L M P S L M P S L M P S L M P S L M P S L M P S
+      "M. Febriansyah":       [,"M","P","P","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S"],
+      // M P S L M P S L M P S L M P S L M P S L M P S L M P S L M P S
+      "Shafiyah Fabiaty":     [,"M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S"],
+      // M P S L M P S L M P S L M P S L M P S L M P S L M P S L M P S
+      "Ummu Aiman Zakia K":   [,"M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S"],
+      // C C C C C C C C C C C C M P P L M P P L M P S L M P S L M P S
+      "Ricki Ramdani":        [,"C","C","C","C","C","C","C","C","C","C","C","C","M","P","P","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","S"],
+      // M P P L M P S L M P P L M P S L M P S L M P S L M P S L M P S
+      "Dwi Sapto Widodo":     [,"M","P","P","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S"],
+      // P P L M P P L M P P L M P S L M P S L M P S L M P S L M P S L
+      "Saleh Alkabiir":       [,"P","P","L","M","P","P","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      // P S L M P S L M P S L M P S L M P S L M P S L M P S L M P S L
+      "Annisa Aziziyah":      [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      // P S L M P S L M P S L M P S L M P S L M P S L M P S L M P S L
+      "Winda Andea Utami":    [,"P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      // P P L M P P L M P P L M P S L M P S L M P S L M P S L M P S L
+      "Ali Usman":            [,"P","P","L","M","P","P","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      // P C C C C C C C C C L M P P L M P P L M P S L M P S L M P S L
+      "Dewantara":            [,"P","C","C","C","C","C","C","C","C","C","L","M","P","P","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","S","L"],
+      // S L M P S L M P S L M P S L M P S L M P S L M P S L M P S L M
+      "Nadia Wahyu R":        [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M"],
+      // S L M P S L M P S L M P S L M P S L M P S L M P S L M P S L M
+      "Siwi Asri Hanifah":    [,"S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M"],
+      // P L M P P L M P P L M P S L M P P L M P S L M P P L M P S L M
+      "M. Bagoes Irwandi":    [,"P","L","M","P","P","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","S","L","M"],
+      // S L M P P L M P P L M P P L M P S L M P S L M P S L M P S L M
+      "Belbi Candra":         [,"S","L","M","P","P","L","M","P","P","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M"],
+      // L S S P L M P S L M P P L M P P L M P S L M P S L M P S L M P
+      "Agil Yurendi":         [,"L","S","S","P","L","M","P","S","L","M","P","P","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
+      // L M P S L M P S L M P S L M P S L M P S L M P S L M P S L M P
+      "Widia Salsabila":      [,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
+      // L M P S L M P S L M P S L M P S L M P S L M P S L M P S L M P
+      "Aqila Shifa Bilbina H":[,"L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P","S","L","M","P"],
+      // L M P P L M P P L M P S L M P P L M P P L M P S L M P S L M P
+      "Rendi Dwi Yulian":     [,"L","M","P","P","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P"],
+      // L M P S L M P P L M P P L M P S L M P P L M P S L M P S L M P
+      "M. Amin Fauzan":       [,"L","M","P","S","L","M","P","P","L","M","P","P","L","M","P","S","L","M","P","P","L","M","P","S","L","M","P","S","L","M","P"],
     }
   }
 };
@@ -563,7 +637,8 @@ const HOLIDAYS = {
   "2026-6": {
     1:"Hari Lahir Pancasila",
     16:"Tahun Baru Islam 1448H"
-  }
+  },
+  "2026-7": {}
 };
 
 const MONTHS_ID=["","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
@@ -576,7 +651,7 @@ let viewYear = now.getFullYear();
 let viewMonth = now.getMonth()+1;
 
 // Clamp to available months
-const AVAIL = ["2026-4","2026-5","2026-6"];
+const AVAIL = ["2026-4","2026-5","2026-6","2026-7"];
 function clampMonth(){
   const key=`${viewYear}-${viewMonth}`;
   if(!AVAIL.includes(key)){
@@ -817,11 +892,13 @@ const PDF_FILES = {
   "2026-4": "jadwal-april-2026.pdf",   // ← ganti nama sesuai file PDF Anda
   "2026-5": "jadwal-mei-2026.pdf",     // ← ganti nama sesuai file PDF Anda
   "2026-6": "jadwal-juni-2026.pdf",    // ← file PDF Juni (upload ke repo dengan nama ini)
+  "2026-7": "jadwal-juli-2026.pdf",    // ← file PDF Juli (upload ke repo dengan nama ini)
 };
 const PDF_LABELS = {
   "2026-4":"Jadwal April 2026",
   "2026-5":"Jadwal Mei 2026",
-  "2026-6":"Jadwal Juni 2026"
+  "2026-6":"Jadwal Juni 2026",
+  "2026-7":"Jadwal Juli 2026"
 };
 function openPdf(key){
   const path=PDF_FILES[key]||'';

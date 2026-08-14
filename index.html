@@ -1079,24 +1079,18 @@ async function fetchSheetCSV(tabName){
 
 /* Parse 1 sheet bulan sesuai template asli (baris "No/Nama" sebagai header,
    baris data = kolom A angka + kolom B nama, kolom C dst = tanggal 1..n) */
-function parseMonthCSV(rows){
+function parseMonthCSV(rows, ndays){
+  // Cari baris header: kolom A = "No", kolom B = "Nama" (fleksibel spasi/kapital/titik)
+  const norm=s=>(s||'').toString().trim().toLowerCase().replace(/[.\s]+$/,'');
   let headerRowIdx=-1;
   for(let i=0;i<rows.length;i++){
-    const a=(rows[i][0]||'').trim().toLowerCase();
-    const b=(rows[i][1]||'').trim().toLowerCase();
-    if(a==='no' && b==='nama'){ headerRowIdx=i; break; }
+    if(norm(rows[i][0])==='no' && norm(rows[i][1])==='nama'){ headerRowIdx=i; break; }
   }
-  if(headerRowIdx===-1) throw new Error('baris header "No / Nama" tidak ditemukan');
+  if(headerRowIdx===-1) throw new Error('baris header "No / Nama" tidak ditemukan (pastikan kolom A berisi "No" dan kolom B berisi "Nama")');
 
-  const headerRow=rows[headerRowIdx];
-  let ndays=0;
-  for(let c=2;c<headerRow.length;c++){
-    const v=(headerRow[c]||'').trim();
-    if(v && /^\d+$/.test(v)) ndays=Math.max(ndays,parseInt(v,10));
-    else if(ndays>0) break;
-  }
-  if(!ndays) throw new Error('kolom tanggal (1,2,3,...) tidak ditemukan di baris header');
-
+  // Catatan: ndays TIDAK dibaca dari angka tanggal di baris header (format sel tanggal
+  // di Sheets bisa macam-macam sehingga sulit ditebak) — dihitung langsung dari kalender
+  // sesuai bulan (key), lalu kolom C dst dibaca sejumlah itu.
   const data={};
   for(let r=headerRowIdx+1;r<rows.length;r++){
     const row=rows[r];
@@ -1110,28 +1104,30 @@ function parseMonthCSV(rows){
     }
     data[name]=arr;
   }
-  if(!Object.keys(data).length) throw new Error('tidak ada baris pegawai yang valid ditemukan');
+  if(!Object.keys(data).length) throw new Error('tidak ada baris pegawai yang valid ditemukan (kolom "No" harus angka & kolom "Nama" harus terisi)');
   return { ndays, data };
 }
 
 async function loadSheetMonth(key, tabName){
   if(!SHEET_ID || SHEET_ID.startsWith('GANTI_')) return false;
   const [y,m]=key.split('-').map(Number);
+  const ndays=new Date(y,m,0).getDate(); // jumlah hari di bulan tsb, dihitung dari kalender
   try{
     const csv=await fetchSheetCSV(tabName);
     const rows=csvToRows(csv);
-    const {ndays,data}=parseMonthCSV(rows);
+    const {data}=parseMonthCSV(rows, ndays);
     const firstDow=new Date(y,m-1,1).getDay();
     ALL_SCH[key]={ndays,firstDow,data};
     if(!AVAIL.includes(key)) AVAIL.push(key);
     sortAvail();
-    console.log(`✅ Jadwal ${key} dimuat dari Google Sheets (tab: ${tabName})`);
+    console.log(`✅ Jadwal ${key} dimuat dari Google Sheets (tab: ${tabName}) — ${Object.keys(data).length} pegawai`);
     return true;
   }catch(err){
     console.warn(`⚠️ Gagal memuat jadwal ${key} dari spreadsheet (tab: ${tabName}):`, err.message, '— memakai data cadangan jika ada.');
     return false;
   }
 }
+
 
 /* Baca tab "Config" (Key,Tab per baris) untuk menentukan daftar bulan aktif
    secara dinamis, tanpa perlu edit kode tiap bulan */

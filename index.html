@@ -17,6 +17,8 @@
   --DL-bg:#1a0a30;--DL:#b060f0;--C-bg:#1e0808;--C:#e05050;
   --L-bg:#111122;--red:#e05050;--toggle-bg:#1a1a40;--toggle-knob:#4a4acc;
   --gold:#c9a84c;--gold2:#e8c97a;
+  --glass-bg:rgba(13,13,28,0.45);--glass-bg2:rgba(10,10,22,0.4);--glass-modal-bg:rgba(12,12,26,0.72);--glass-border:rgba(160,170,255,0.14);
+  --glass-highlight:rgba(255,255,255,0.05);--glass-blur:18px;
 }
 :root[data-theme="light"]{
   --bg:#edf0fa;--bg2:#ffffff;--bg3:#e4e8f5;--border:#cdd2ec;--border2:#aab2d8;
@@ -26,6 +28,8 @@
   --DL-bg:#f3e5f5;--DL:#7b1fa2;--C-bg:#fce4ec;--C:#c62828;
   --L-bg:#f5f5f5;--red:#c62828;--toggle-bg:#c8ccee;--toggle-knob:#3a3acc;
   --gold:#c9a84c;--gold2:#e8c97a;
+  --glass-bg:rgba(255,255,255,0.45);--glass-bg2:rgba(255,255,255,0.55);--glass-modal-bg:rgba(255,255,255,0.78);--glass-border:rgba(255,255,255,0.55);
+  --glass-highlight:rgba(255,255,255,0.7);--glass-blur:18px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;transition:background .3s,color .3s;}
@@ -112,8 +116,10 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 
 /* PANEL LIGHT: rotated squares texture (referensi gambar 1) */
 .today-panel{
-  background:var(--card);
-  border:1px solid var(--border);border-radius:10px;padding:13px 14px;box-shadow:0 2px 12px var(--shadow);
+  background:var(--glass-bg);
+  backdrop-filter:blur(var(--glass-blur)) saturate(160%);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(160%);
+  border:1px solid var(--glass-border);border-radius:10px;padding:13px 14px;
+  box-shadow:0 4px 24px var(--shadow),inset 0 1px 0 var(--glass-highlight);
   position:relative;overflow:hidden;
 }
 .today-panel::before{
@@ -125,8 +131,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 
 /* PANEL DARK: plexus-style glow (referensi gambar 4 – blue/pink nodes on dark) */
 [data-theme="dark"] .today-panel{
-  background:linear-gradient(145deg,#0d0a1e 0%,#060d1a 100%);
-  border-color:#1e1e40;
+  background:linear-gradient(145deg,rgba(13,10,30,0.45) 0%,rgba(6,13,26,0.45) 100%);
+  border-color:rgba(160,170,255,0.14);
 }
 [data-theme="dark"] .today-panel::before{
   background-image:
@@ -135,8 +141,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 }
 
 [data-theme="dark"] .tri-day-panel{
-  background:linear-gradient(145deg,#08091a 0%,#060c18 100%);
-  border-color:#1c1c3a;
+  background:linear-gradient(145deg,rgba(8,9,26,0.45) 0%,rgba(6,12,24,0.45) 100%);
+  border-color:rgba(160,170,255,0.14);
 }
 [data-theme="dark"] .tri-day-panel::before{
   content:'';position:absolute;inset:0;pointer-events:none;border-radius:10px;
@@ -176,24 +182,24 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 .no-schedule{font-size:11px;color:var(--text3);line-height:1.6;margin-top:6px;position:relative;z-index:1;}
 
 /* CONTROLS BAR (month nav + pdf) between top panel and calendar */
-.controls-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 10px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;flex-wrap:wrap;}
+.controls-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 10px;padding:8px 12px;background:var(--glass-bg2);backdrop-filter:blur(var(--glass-blur)) saturate(160%);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(160%);border:1px solid var(--glass-border);border-radius:10px;flex-wrap:wrap;box-shadow:inset 0 1px 0 var(--glass-highlight);}
 [data-theme="dark"] .controls-bar{
-  background:linear-gradient(90deg,#0a0a1a 0%,#0d0d20 100%);
-  border-color:#222240;
+  background:linear-gradient(90deg,rgba(10,10,26,0.4) 0%,rgba(13,13,32,0.4) 100%);
+  border-color:rgba(160,170,255,0.14);
   box-shadow:0 1px 0 rgba(201,168,76,0.07) inset,0 -1px 0 rgba(201,168,76,0.04) inset;
 }
-[data-theme="dark"] .mnav-btn{background:#111130;border-color:#2a2a50;}
-[data-theme="dark"] .mnav-btn:hover{background:#1a1a3a;border-color:rgba(201,168,76,0.35);}
-[data-theme="dark"] .pdf-btn{background:#111130;border-color:#2a2a50;}
-[data-theme="dark"] .pdf-btn:hover{background:#1a1a3a;border-color:rgba(201,168,76,0.35);}
+[data-theme="dark"] .mnav-btn{background:rgba(17,17,48,0.5);border-color:rgba(160,170,255,0.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+[data-theme="dark"] .mnav-btn:hover{background:rgba(26,26,58,0.65);border-color:rgba(201,168,76,0.35);}
+[data-theme="dark"] .pdf-btn{background:rgba(17,17,48,0.5);border-color:rgba(160,170,255,0.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+[data-theme="dark"] .pdf-btn:hover{background:rgba(26,26,58,0.65);border-color:rgba(201,168,76,0.35);}
 .controls-left{display:flex;align-items:center;gap:8px;}
 .controls-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.mnav-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:7px;color:var(--text2);font-size:12px;padding:5px 12px;cursor:pointer;}
+.mnav-btn{background:var(--glass-bg2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--glass-border);border-radius:7px;color:var(--text2);font-size:12px;padding:5px 12px;cursor:pointer;}
 .mnav-btn:hover{background:var(--border);}
 .mnav-label{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--text);min-width:110px;text-align:center;}
 .pdf-sep{width:1px;height:20px;background:var(--border2);}
 .pdf-btn-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;}
-.pdf-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:7px;color:var(--text2);font-size:11px;padding:5px 12px;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.pdf-btn{background:var(--glass-bg2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--glass-border);border-radius:7px;color:var(--text2);font-size:11px;padding:5px 12px;cursor:pointer;display:flex;align-items:center;gap:5px;}
 .pdf-btn:hover{background:var(--border);border-color:var(--toggle-knob);}
 .pdf-btn svg{flex-shrink:0;}
 
@@ -202,9 +208,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
 .cal-hdr{text-align:center;font-size:9px;color:var(--text3);padding:3px 2px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;}
 .cal-hdr.wknd{color:#904040;}
-.cal-day{background:var(--bg2);border-radius:7px;padding:5px 3px 5px;min-height:56px;cursor:pointer;border:1px solid transparent;transition:border-color .12s;position:relative;overflow:hidden;}
+.cal-day{background:var(--glass-bg2);backdrop-filter:blur(10px) saturate(150%);-webkit-backdrop-filter:blur(10px) saturate(150%);border-radius:7px;padding:5px 3px 5px;min-height:56px;cursor:pointer;border:1px solid var(--glass-border);transition:border-color .12s,background .12s;position:relative;overflow:hidden;}
 .cal-day:hover{border-color:var(--border2);}
-.cal-day.today-hl{background:var(--bg3);border-color:var(--toggle-knob);}
+.cal-day.today-hl{background:var(--glass-highlight);border-color:var(--toggle-knob);}
 .cal-day.is-sun .dnum{color:#b05050;}
 .cal-day.is-sat .dnum{color:#705080;}
 .cal-day.holiday .dnum{color:var(--red)!important;}
@@ -221,9 +227,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='24'%3E%3Cpath d='M14 1 L25 7 L25 17 L14 23 L3 17 L3 7 Z' fill='none' stroke='rgba(201%2C168%2C76%2C0.09)' stroke-width='0.8'/%3E%3C/svg%3E");
   background-size: 28px 24px;
 }
-[data-theme="dark"] .cal-day{background:#0c0c1e;border-color:#181830;}
-[data-theme="dark"] .cal-day:hover{border-color:rgba(201,168,76,0.25);background:#0f0f24;}
-[data-theme="dark"] .cal-day.today-hl{background:#131330;border-color:rgba(74,74,204,0.6);}
+[data-theme="dark"] .cal-day{background:rgba(12,12,30,0.4);border-color:rgba(160,170,255,0.1);}
+[data-theme="dark"] .cal-day:hover{border-color:rgba(201,168,76,0.35);background:rgba(15,15,36,0.55);}
+[data-theme="dark"] .cal-day.today-hl{background:rgba(19,19,48,0.6);border-color:rgba(74,74,204,0.7);}
 .dnum{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--text3);text-align:center;margin-bottom:3px;position:relative;z-index:1;}
 .hol-dot{position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--red);z-index:2;}
 .dbadges{display:flex;justify-content:center;gap:2px;flex-wrap:wrap;position:relative;z-index:1;}
@@ -246,7 +252,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 .lb-H{background:#200a0a;border:1px solid var(--red);}
 
 /* TRI-DAY PANEL (H-1 / Today / H+1) - unified single panel */
-.tri-day-panel{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 14px;box-shadow:0 2px 12px var(--shadow);position:relative;overflow:hidden;}
+.tri-day-panel{background:var(--glass-bg);backdrop-filter:blur(var(--glass-blur)) saturate(160%);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(160%);border:1px solid var(--glass-border);border-radius:10px;padding:13px 14px;box-shadow:0 4px 24px var(--shadow),inset 0 1px 0 var(--glass-highlight);position:relative;overflow:hidden;}
 .tri-day-grid{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:0;margin-top:6px;height:calc(100% - 26px);position:relative;z-index:1;}
 .tdc{padding:10px 12px;border-top:2px solid var(--border2);position:relative;}
 .tdc+.tdc{border-left:1px solid var(--border);}
@@ -265,7 +271,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 /* PDF MODAL */
 .pdf-modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,8,.88);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
 .pdf-modal-ov.open{display:flex;}
-.pdf-modal{background:var(--modal-bg);border:1px solid var(--border2);border-radius:14px;width:90vw;max-width:900px;height:85vh;display:flex;flex-direction:column;animation:popIn .18s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 40px var(--shadow);overflow:hidden;}
+.pdf-modal{background:var(--glass-modal-bg);backdrop-filter:blur(24px) saturate(170%);-webkit-backdrop-filter:blur(24px) saturate(170%);border:1px solid var(--glass-border);border-radius:14px;width:90vw;max-width:900px;height:85vh;display:flex;flex-direction:column;animation:popIn .18s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 40px var(--shadow),inset 0 1px 0 var(--glass-highlight);overflow:hidden;}
 .pdf-modal-header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border);}
 .pdf-modal-title{font-size:13px;font-weight:600;color:var(--text);}
 .pdf-modal-body{flex:1;overflow:hidden;background:#333;}
@@ -275,7 +281,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 /* MODAL */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,8,.82);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .modal-ov.open{display:flex;}
-.modal{background:var(--modal-bg);border:1px solid var(--border2);border-radius:14px;padding:20px;width:720px;max-width:96vw;max-height:88vh;display:flex;flex-direction:column;animation:popIn .18s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 40px var(--shadow);}
+.modal{background:var(--glass-modal-bg);backdrop-filter:blur(24px) saturate(170%);-webkit-backdrop-filter:blur(24px) saturate(170%);border:1px solid var(--glass-border);border-radius:14px;padding:20px;width:720px;max-width:96vw;max-height:88vh;display:flex;flex-direction:column;animation:popIn .18s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 40px var(--shadow),inset 0 1px 0 var(--glass-highlight);}
 @keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
 .modal-date-big{font-family:'Space Mono',monospace;font-size:14px;color:var(--text);margin-bottom:2px;}
 .modal-hol{font-size:11px;color:var(--red);margin-bottom:8px;}
@@ -369,25 +375,10 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
       <div class="mnav-label" id="mnav-label">— 2026</div>
       <button class="mnav-btn" onclick="changeMonth(1)">Berikutnya &#8594;</button>
     </div>
-    <div class="controls-right">
+    <div class="controls-right" id="pdf-btns-wrap">
       <div class="pdf-sep"></div>
       <span class="pdf-btn-label">📄 Jadwal PDF:</span>
-      <button class="pdf-btn" onclick="openPdf('2026-4')">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        April 2026
-      </button>
-      <button class="pdf-btn" onclick="openPdf('2026-5')">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Mei 2026
-      </button>
-      <button class="pdf-btn" onclick="openPdf('2026-6')">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Juni 2026
-      </button>
-      <button class="pdf-btn" onclick="openPdf('2026-7')">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Juli 2026
-      </button>
+      <span id="pdf-btns" style="display:contents;"><!-- diisi otomatis oleh JS dari PDF_FILES/PDF_LABELS --></span>
     </div>
   </div>
 
@@ -440,7 +431,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 <script>
 // ===================== DATA =====================
 // Versi data: v2 — Update Mei 2026 sesuai PDF 25 April 2026
-const DATA_VERSION = "v4-juli-updated-27juli-agustus-added";
+const DATA_VERSION = "v5-glassmorphism-ui-sheets-integration";
 const ALL_SCH = {
   // ---------- APRIL 2026 ----------
   "2026-4": {
@@ -704,6 +695,13 @@ let viewMonth = now.getMonth()+1;
 
 // Clamp to available months
 const AVAIL = ["2026-4","2026-5","2026-6","2026-7","2026-8"];
+function sortAvail(){
+  AVAIL.sort((a,b)=>{
+    const [ay,am]=a.split('-').map(Number);
+    const [by,bm]=b.split('-').map(Number);
+    return (ay-by)||(am-bm);
+  });
+}
 function clampMonth(){
   const key=`${viewYear}-${viewMonth}`;
   if(!AVAIL.includes(key)){
@@ -954,6 +952,119 @@ const PDF_LABELS = {
   "2026-7":"Jadwal Juli 2026",
   "2026-8":"Jadwal Agustus 2026"
 };
+/* ================================================================
+   INTEGRASI GOOGLE SHEETS (mulai Agustus 2026 dan seterusnya)
+   ================================================================
+   CARA SETUP:
+   1. Buat 1 Google Spreadsheet. Di dalamnya, buat 1 SHEET/TAB per bulan,
+      beri nama bebas asal konsisten, contoh: "Agustus26", "September26", "Oktober26".
+   2. Format tiap sheet PERSIS seperti tabel PDF:
+        Baris 1 (header)  : Nama | 1 | 2 | 3 | ... | 31   (angka tanggal)
+        Baris 2 dst       : Nama Petugas | S | S | L | M | P | ...
+      Isi sel = kode shift: P, S, M, L, DL, C (huruf besar/kecil sama saja).
+      Sel kosong = tidak ada jadwal / belum diisi.
+   3. Klik "Share" pada spreadsheet → set ke "Anyone with the link" → Viewer.
+   4. Salin SPREADSHEET ID dari URL:
+        https://docs.google.com/spreadsheets/d/[SPREADSHEET_ID_DI_SINI]/edit
+      lalu tempel di variabel SHEET_ID di bawah ini.
+   5. Setiap bulan baru: tambah 1 sheet baru di spreadsheet + tambah 1 baris
+      di array MONTH_SHEETS di bawah (key format "TAHUN-BULAN", tab = nama sheet).
+      Tidak perlu edit data ALL_SCH secara manual lagi untuk bulan-bulan ini.
+   6. PDF tetap manual seperti biasa: upload file PDF ke repo + isi PDF_FILES/PDF_LABELS.
+
+   Catatan: jika SHEET_ID belum diisi / fetch gagal (offline, salah setting share,
+   dsb), website TETAP JALAN memakai data cadangan (hardcoded) yang sudah ada
+   di ALL_SCH untuk bulan tersebut (kalau ada), tidak akan error/blank.
+================================================================ */
+const SHEET_ID = "GANTI_DENGAN_SPREADSHEET_ID_ANDA"; // ← tempel Spreadsheet ID di sini
+
+const MONTH_SHEETS = [
+  { key:"2026-8", tab:"Agustus26" },
+  // Tambahkan baris baru di sini tiap bulan berikutnya, contoh:
+  // { key:"2026-9", tab:"September26" },
+  // { key:"2026-10", tab:"Oktober26" },
+];
+
+// Parser CSV sederhana (mendukung tanda kutip untuk sel yang mengandung koma)
+function csvToRows(csv){
+  const rows=[]; let row=[]; let field=''; let inQuotes=false;
+  for(let i=0;i<csv.length;i++){
+    const c=csv[i];
+    if(inQuotes){
+      if(c==='"'){ if(csv[i+1]==='"'){field+='"';i++;} else inQuotes=false; }
+      else field+=c;
+    } else {
+      if(c==='"') inQuotes=true;
+      else if(c===','){ row.push(field); field=''; }
+      else if(c==='\n'||c==='\r'){
+        if(c==='\r'&&csv[i+1]==='\n') i++;
+        row.push(field); field=''; rows.push(row); row=[];
+      } else field+=c;
+    }
+  }
+  if(field.length||row.length){ row.push(field); rows.push(row); }
+  return rows.filter(r=>r.length&&r.some(c=>c.trim()!==''));
+}
+
+async function loadSheetMonth(key, tabName){
+  if(!SHEET_ID || SHEET_ID.startsWith('GANTI_')) return false;
+  const [y,m]=key.split('-').map(Number);
+  const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
+  try{
+    const res=await fetch(url);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const csv=await res.text();
+    const rows=csvToRows(csv);
+    if(rows.length<2) throw new Error('sheet kosong / format tidak sesuai');
+
+    const ndays=new Date(y,m,0).getDate();       // hari terakhir bulan tsb
+    const firstDow=new Date(y,m-1,1).getDay();    // hari pertama (0=Minggu)
+    const data={};
+    for(let r=1;r<rows.length;r++){
+      const cells=rows[r];
+      const name=(cells[0]||'').trim();
+      if(!name) continue;
+      const arr=[,]; // index 0 sengaja kosong (tanggal mulai dari index 1)
+      for(let d=1; d<=ndays; d++){
+        const raw=(cells[d]||'').trim().toUpperCase();
+        arr[d]= raw?raw:null;
+      }
+      data[name]=arr;
+    }
+    if(!Object.keys(data).length) throw new Error('tidak ada baris nama yang valid');
+
+    ALL_SCH[key]={ndays,firstDow,data};
+    if(!AVAIL.includes(key)) AVAIL.push(key);
+    sortAvail();
+    console.log(`✅ Jadwal ${key} dimuat dari Google Sheets (tab: ${tabName})`);
+    return true;
+  }catch(err){
+    console.warn(`⚠️ Gagal memuat jadwal ${key} dari spreadsheet (tab: ${tabName}):`, err.message, '— memakai data cadangan jika ada.');
+    return false;
+  }
+}
+
+async function loadAllSheets(){
+  for(const m of MONTH_SHEETS){
+    await loadSheetMonth(m.key, m.tab);
+  }
+}
+
+/* Render tombol PDF otomatis berdasarkan AVAIL + PDF_LABELS (tidak perlu edit HTML tiap bulan) */
+function renderPdfButtons(){
+  const wrap=document.getElementById('pdf-btns');
+  if(!wrap) return;
+  wrap.innerHTML='';
+  AVAIL.forEach(key=>{
+    const label=(PDF_LABELS[key]||key);
+    const btn=document.createElement('button');
+    btn.className='pdf-btn';
+    btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> ${label}`;
+    btn.onclick=()=>openPdf(key);
+    wrap.appendChild(btn);
+  });
+}
+
 function openPdf(key){
   const path=PDF_FILES[key]||'';
   const title=PDF_LABELS[key]||'Jadwal PDF';
@@ -995,14 +1106,21 @@ function renderAll(){
   renderCal();
 }
 
-function init(){
+async function init(){
   initTheme();
+  sortAvail();
+  tickClock(); setInterval(tickClock,1000);
+
+  // Coba muat data bulan-bulan terbaru dari Google Sheets (kalau SHEET_ID sudah diisi)
+  await loadAllSheets();
+
   clampMonth();
   // Default view = current month if available, else latest available
   const curKey=getKey(now.getFullYear(),now.getMonth()+1);
   if(AVAIL.includes(curKey)){viewYear=now.getFullYear();viewMonth=now.getMonth()+1;}
   else{const[y,m]=AVAIL[AVAIL.length-1].split('-').map(Number);viewYear=y;viewMonth=m;}
-  tickClock(); setInterval(tickClock,1000);
+
+  renderPdfButtons();
   renderAll(); setInterval(renderToday,60000);
 }
 init();

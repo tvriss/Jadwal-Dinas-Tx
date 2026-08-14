@@ -181,6 +181,21 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 .today-month{font-size:10px;color:var(--text3);position:relative;z-index:1;}
 .no-schedule{font-size:11px;color:var(--text3);line-height:1.6;margin-top:6px;position:relative;z-index:1;}
 
+/* TODAY PANEL — ringkasan jumlah pegawai berdinas hari ini */
+.today-summary{margin-top:12px;padding-top:10px;border-top:1px solid var(--border);position:relative;z-index:1;}
+.ts-total-num{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:var(--text);line-height:1;}
+.ts-total-lbl{font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-top:2px;margin-bottom:9px;}
+.ts-row{display:flex;align-items:center;justify-content:space-between;font-size:10.5px;color:var(--text2);padding:2.5px 0;}
+.ts-row-lbl{display:flex;align-items:center;gap:6px;}
+.ts-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.ts-dot.ts-P{background:var(--P);}
+.ts-dot.ts-S{background:var(--S);}
+.ts-dot.ts-M{background:var(--M);}
+.ts-dot.ts-L{background:var(--text3);}
+.ts-dot.ts-DL{background:var(--DL);}
+.ts-dot.ts-C{background:var(--C);}
+.ts-count{font-family:'Space Mono',monospace;font-weight:700;color:var(--text);font-size:11px;}
+
 /* CONTROLS BAR (month nav + pdf) between top panel and calendar */
 .controls-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 10px;padding:8px 12px;background:var(--glass-bg2);backdrop-filter:blur(var(--glass-blur)) saturate(160%);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(160%);border:1px solid var(--glass-border);border-radius:10px;flex-wrap:wrap;box-shadow:inset 0 1px 0 var(--glass-highlight);}
 [data-theme="dark"] .controls-bar{
@@ -358,6 +373,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
       <div class="today-day" id="td-day">—</div>
       <div class="today-month" id="td-mon">—</div>
       <div class="no-schedule hidden" id="no-sch"></div>
+      <div class="today-summary hidden" id="today-summary"></div>
     </div>
     <div class="tri-day-panel">
       <div class="panel-label" id="duty-panel-label">H−1 · HARI INI · H+1</div>
@@ -431,7 +447,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 <script>
 // ===================== DATA =====================
 // Versi data: v2 — Update Mei 2026 sesuai PDF 25 April 2026
-const DATA_VERSION = "v5-glassmorphism-ui-sheets-integration";
+const DATA_VERSION = "v6-today-summary-contextual-pdf-sheets-config-tab";
 const ALL_SCH = {
   // ---------- APRIL 2026 ----------
   "2026-4": {
@@ -680,7 +696,8 @@ const HOLIDAYS = {
   },
   "2026-7": {},
   "2026-8": {
-    17:"HUT Kemerdekaan RI ke-81"
+    17:"HUT Kemerdekaan RI ke-81",
+    25:"Maulid Nabi Muhammad SAW"
   }
 };
 
@@ -782,6 +799,31 @@ function buildTriDayCol(y,m,d,label,isToday){
   </div>`;
 }
 
+/* Ringkasan jumlah pegawai berdinas hari ini (di panel kiri atas) */
+function renderTodaySummary(sh){
+  const el=document.getElementById('today-summary');
+  if(!sh){ el.classList.add('hidden'); el.innerHTML=''; return; }
+  const total=sh.P.length+sh.S.length+sh.M.length+sh.L.length+sh.DL.length+sh.C.length;
+  const rows=[
+    ['P','Pagi',sh.P.length],
+    ['S','Siang',sh.S.length],
+    ['M','Malam',sh.M.length],
+    ['L','Libur',sh.L.length],
+  ];
+  if(sh.C.length) rows.push(['C','Cuti',sh.C.length]);
+  if(sh.DL.length) rows.push(['DL','Dinas Luar',sh.DL.length]);
+  el.innerHTML=`
+    <div class="ts-total-num">${total}</div>
+    <div class="ts-total-lbl">Pegawai Terjadwal</div>
+    ${rows.map(([k,lbl,n])=>`
+      <div class="ts-row">
+        <span class="ts-row-lbl"><span class="ts-dot ts-${k}"></span>${lbl}</span>
+        <span class="ts-count">${n}</span>
+      </div>`).join('')}
+  `;
+  el.classList.remove('hidden');
+}
+
 function renderToday(){
   const n=new Date();
   const realD=n.getDate(), realM=n.getMonth()+1, realY=n.getFullYear();
@@ -799,11 +841,13 @@ function renderToday(){
     dutyNodata.classList.remove('hidden');
     noSchEl.classList.remove('hidden');
     noSchEl.innerHTML=`Jadwal tersedia:<br>${AVAIL.map(k=>{const[y,m]=k.split('-');return MONTHS_ID[m]+' '+y;}).join(', ')}`;
+    renderTodaySummary(null);
     return;
   }
   noSchEl.classList.add('hidden');
   dutyWrap.classList.remove('hidden');
   dutyNodata.classList.add('hidden');
+  renderTodaySummary(getShifts(realY,realM,realD));
 
   // Compute prev/next day with month boundary handling
   let py=realY,pm=realM,pd=realD-1;
@@ -955,34 +999,54 @@ const PDF_LABELS = {
 /* ================================================================
    INTEGRASI GOOGLE SHEETS (mulai Agustus 2026 dan seterusnya)
    ================================================================
-   CARA SETUP:
-   1. Buat 1 Google Spreadsheet. Di dalamnya, buat 1 SHEET/TAB per bulan,
-      beri nama bebas asal konsisten, contoh: "Agustus26", "September26", "Oktober26".
-   2. Format tiap sheet PERSIS seperti tabel PDF:
-        Baris 1 (header)  : Nama | 1 | 2 | 3 | ... | 31   (angka tanggal)
-        Baris 2 dst       : Nama Petugas | S | S | L | M | P | ...
-      Isi sel = kode shift: P, S, M, L, DL, C (huruf besar/kecil sama saja).
-      Sel kosong = tidak ada jadwal / belum diisi.
-   3. Klik "Share" pada spreadsheet → set ke "Anyone with the link" → Viewer.
-   4. Salin SPREADSHEET ID dari URL:
+   FORMAT SHEET (mengikuti template Excel/Sheet Anda apa adanya, TIDAK
+   perlu diubah — parser ini otomatis mendeteksi baris header & data):
+     - Ada baris berisi "No" di kolom A dan "Nama" di kolom B — baris ini
+       dianggap baris header, kolom-kolom setelahnya (C, D, E, ...)
+       dianggap tanggal 1, 2, 3, ... dst.
+     - Baris-baris setelahnya yang kolom A-nya angka (No urut) dan kolom
+       B-nya berisi nama, dianggap baris data pegawai. Baris "HARI",
+       nama-nama hari, baris kosong, dsb otomatis dilewati.
+     - Isi sel jadwal = P, S, M, L, DL, atau C (besar/kecil sama saja).
+     - Kolom rekap di kanan (M/P/S/L/DL/C/Total, tabel Count Shift, dst)
+       TIDAK masalah ada di sheet yang sama — otomatis diabaikan.
+
+   CARA KERJA "TAMBAH BULAN BARU TANPA REDEPLOY":
+   1. Di spreadsheet yang sama, buat 1 tab khusus bernama persis "Config"
+      (lihat CONFIG_TAB di bawah), isi 2 kolom:
+          Key         | Tab
+          2026-8      | Agustus26
+          2026-9      | September26
+          2026-10     | Oktober26
+      Baris 1 = header (bebas), baris berikutnya = daftar bulan aktif.
+   2. Setiap kali mau menambah bulan baru: cukup (a) buat tab baru untuk
+      bulan itu di spreadsheet, isi jadwalnya, lalu (b) tambah 1 baris di
+      tab "Config" yang menunjuk ke tab tsb. TIDAK perlu edit/upload ulang
+      file HTML — website akan otomatis membaca tab "Config" setiap kali
+      dibuka/di-refresh, dan bulan baru langsung muncul.
+   3. Jika tab "Config" belum dibuat, website akan memakai daftar cadangan
+      manual di MONTH_SHEETS (lihat di bawah) sebagai fallback.
+
+   SETUP AWAL (WAJIB sekali di awal):
+   1. Klik "Bagikan" pada spreadsheet → "Siapa saja yang memiliki link" →
+      Viewer (Pelihat).
+   2. Salin SPREADSHEET ID dari URL:
         https://docs.google.com/spreadsheets/d/[SPREADSHEET_ID_DI_SINI]/edit
       lalu tempel di variabel SHEET_ID di bawah ini.
-   5. Setiap bulan baru: tambah 1 sheet baru di spreadsheet + tambah 1 baris
-      di array MONTH_SHEETS di bawah (key format "TAHUN-BULAN", tab = nama sheet).
-      Tidak perlu edit data ALL_SCH secara manual lagi untuk bulan-bulan ini.
-   6. PDF tetap manual seperti biasa: upload file PDF ke repo + isi PDF_FILES/PDF_LABELS.
+   4. PDF tetap manual seperti biasa: upload file PDF ke repo + isi
+      PDF_FILES/PDF_LABELS di kode ini (redeploy hanya diperlukan untuk PDF).
 
-   Catatan: jika SHEET_ID belum diisi / fetch gagal (offline, salah setting share,
-   dsb), website TETAP JALAN memakai data cadangan (hardcoded) yang sudah ada
-   di ALL_SCH untuk bulan tersebut (kalau ada), tidak akan error/blank.
+   Catatan: jika SHEET_ID belum diisi / fetch gagal (offline, salah setting
+   share, dsb), website TETAP JALAN memakai data cadangan (hardcoded) yang
+   sudah ada di ALL_SCH untuk bulan tersebut (kalau ada), tidak akan error/blank.
 ================================================================ */
-const SHEET_ID = "GANTI_DENGAN_SPREADSHEET_ID_ANDA"; // ← tempel Spreadsheet ID di sini
+const SHEET_ID = "1n91W7wS1mOtEg5S8c6j1q5kJ98Hy8PrqrAU0AxTfU5s"; // Spreadsheet: Jadwal Dinas Transmisi TVRI Sumatera Selatan 2026
+const CONFIG_TAB = "Config"; // nama tab berisi daftar bulan aktif (opsional tapi disarankan)
 
 const MONTH_SHEETS = [
-  { key:"2026-8", tab:"Agustus26" },
-  // Tambahkan baris baru di sini tiap bulan berikutnya, contoh:
-  // { key:"2026-9", tab:"September26" },
-  // { key:"2026-10", tab:"Oktober26" },
+  { key:"2026-8", tab:"Agustus26" }, // fallback manual jika tab "Config" belum dibuat
+  // Tambahkan baris di sini juga boleh, tapi lebih baik pakai tab "Config"
+  // di spreadsheet supaya tidak perlu edit kode tiap bulan.
 ];
 
 // Parser CSV sederhana (mendukung tanda kutip untuk sel yang mengandung koma)
@@ -1003,36 +1067,61 @@ function csvToRows(csv){
     }
   }
   if(field.length||row.length){ row.push(field); rows.push(row); }
-  return rows.filter(r=>r.length&&r.some(c=>c.trim()!==''));
+  return rows;
+}
+
+async function fetchSheetCSV(tabName){
+  const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
+  const res=await fetch(url);
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  return await res.text();
+}
+
+/* Parse 1 sheet bulan sesuai template asli (baris "No/Nama" sebagai header,
+   baris data = kolom A angka + kolom B nama, kolom C dst = tanggal 1..n) */
+function parseMonthCSV(rows){
+  let headerRowIdx=-1;
+  for(let i=0;i<rows.length;i++){
+    const a=(rows[i][0]||'').trim().toLowerCase();
+    const b=(rows[i][1]||'').trim().toLowerCase();
+    if(a==='no' && b==='nama'){ headerRowIdx=i; break; }
+  }
+  if(headerRowIdx===-1) throw new Error('baris header "No / Nama" tidak ditemukan');
+
+  const headerRow=rows[headerRowIdx];
+  let ndays=0;
+  for(let c=2;c<headerRow.length;c++){
+    const v=(headerRow[c]||'').trim();
+    if(v && /^\d+$/.test(v)) ndays=Math.max(ndays,parseInt(v,10));
+    else if(ndays>0) break;
+  }
+  if(!ndays) throw new Error('kolom tanggal (1,2,3,...) tidak ditemukan di baris header');
+
+  const data={};
+  for(let r=headerRowIdx+1;r<rows.length;r++){
+    const row=rows[r];
+    const no=(row[0]||'').trim();
+    const name=(row[1]||'').trim();
+    if(!name || !/^\d+$/.test(no)) continue; // lewati baris "HARI", nama hari, baris kosong, footer, dll
+    const arr=[,]; // index 0 sengaja kosong
+    for(let d=1; d<=ndays; d++){
+      const raw=(row[1+d]||'').trim().toUpperCase();
+      arr[d]=raw?raw:null;
+    }
+    data[name]=arr;
+  }
+  if(!Object.keys(data).length) throw new Error('tidak ada baris pegawai yang valid ditemukan');
+  return { ndays, data };
 }
 
 async function loadSheetMonth(key, tabName){
   if(!SHEET_ID || SHEET_ID.startsWith('GANTI_')) return false;
   const [y,m]=key.split('-').map(Number);
-  const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
   try{
-    const res=await fetch(url);
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const csv=await res.text();
+    const csv=await fetchSheetCSV(tabName);
     const rows=csvToRows(csv);
-    if(rows.length<2) throw new Error('sheet kosong / format tidak sesuai');
-
-    const ndays=new Date(y,m,0).getDate();       // hari terakhir bulan tsb
-    const firstDow=new Date(y,m-1,1).getDay();    // hari pertama (0=Minggu)
-    const data={};
-    for(let r=1;r<rows.length;r++){
-      const cells=rows[r];
-      const name=(cells[0]||'').trim();
-      if(!name) continue;
-      const arr=[,]; // index 0 sengaja kosong (tanggal mulai dari index 1)
-      for(let d=1; d<=ndays; d++){
-        const raw=(cells[d]||'').trim().toUpperCase();
-        arr[d]= raw?raw:null;
-      }
-      data[name]=arr;
-    }
-    if(!Object.keys(data).length) throw new Error('tidak ada baris nama yang valid');
-
+    const {ndays,data}=parseMonthCSV(rows);
+    const firstDow=new Date(y,m-1,1).getDay();
     ALL_SCH[key]={ndays,firstDow,data};
     if(!AVAIL.includes(key)) AVAIL.push(key);
     sortAvail();
@@ -1044,25 +1133,45 @@ async function loadSheetMonth(key, tabName){
   }
 }
 
+/* Baca tab "Config" (Key,Tab per baris) untuk menentukan daftar bulan aktif
+   secara dinamis, tanpa perlu edit kode tiap bulan */
+async function loadMonthConfig(){
+  if(!SHEET_ID || SHEET_ID.startsWith('GANTI_')) return [];
+  try{
+    const csv=await fetchSheetCSV(CONFIG_TAB);
+    const rows=csvToRows(csv).filter(r=>r.some(c=>c.trim()!==''));
+    const list=[];
+    for(let r=1;r<rows.length;r++){ // baris 0 = header
+      const key=(rows[r][0]||'').trim();
+      const tab=(rows[r][1]||'').trim();
+      if(/^\d{4}-\d{1,2}$/.test(key) && tab) list.push({key,tab});
+    }
+    return list;
+  }catch(err){
+    console.warn('Tab "Config" belum tersedia / gagal dibaca, memakai daftar manual (MONTH_SHEETS).', err.message);
+    return [];
+  }
+}
+
 async function loadAllSheets(){
-  for(const m of MONTH_SHEETS){
+  const dynamicList=await loadMonthConfig();
+  const list=dynamicList.length?dynamicList:MONTH_SHEETS;
+  for(const m of list){
     await loadSheetMonth(m.key, m.tab);
   }
 }
 
-/* Render tombol PDF otomatis berdasarkan AVAIL + PDF_LABELS (tidak perlu edit HTML tiap bulan) */
-function renderPdfButtons(){
+/* Render tombol PDF: hanya 1 tombol, sesuai bulan yang SEDANG ditampilkan
+   di kalender (viewYear/viewMonth) — otomatis berubah saat pindah bulan */
+function renderPdfButton(){
   const wrap=document.getElementById('pdf-btns');
   if(!wrap) return;
-  wrap.innerHTML='';
-  AVAIL.forEach(key=>{
-    const label=(PDF_LABELS[key]||key);
-    const btn=document.createElement('button');
-    btn.className='pdf-btn';
-    btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> ${label}`;
-    btn.onclick=()=>openPdf(key);
-    wrap.appendChild(btn);
-  });
+  const key=getKey(viewYear,viewMonth);
+  const label=PDF_LABELS[key]||('Jadwal '+MONTHS_ID[viewMonth]+' '+viewYear);
+  wrap.innerHTML=`<button class="pdf-btn" onclick="openPdf('${key}')">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    ${label}
+  </button>`;
 }
 
 function openPdf(key){
@@ -1104,6 +1213,7 @@ document.getElementById('pdf-modal-ov').addEventListener('click',e=>{if(e.target
 function renderAll(){
   renderToday();
   renderCal();
+  renderPdfButton();
 }
 
 async function init(){
@@ -1120,7 +1230,6 @@ async function init(){
   if(AVAIL.includes(curKey)){viewYear=now.getFullYear();viewMonth=now.getMonth()+1;}
   else{const[y,m]=AVAIL[AVAIL.length-1].split('-').map(Number);viewYear=y;viewMonth=m;}
 
-  renderPdfButtons();
   renderAll(); setInterval(renderToday,60000);
 }
 init();

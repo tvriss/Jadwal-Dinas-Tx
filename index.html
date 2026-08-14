@@ -211,6 +211,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 .controls-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .mnav-btn{background:var(--glass-bg2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--glass-border);border-radius:7px;color:var(--text2);font-size:12px;padding:5px 12px;cursor:pointer;}
 .mnav-btn:hover{background:var(--border);}
+.mnav-btn:disabled{opacity:.35;cursor:not-allowed;}
+.mnav-btn:disabled:hover{background:var(--glass-bg2);}
 .mnav-label{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--text);min-width:110px;text-align:center;}
 .pdf-sep{width:1px;height:20px;background:var(--border2);}
 .pdf-btn-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;}
@@ -387,9 +389,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
   <!-- CONTROLS BAR: Month Nav + PDF Buttons (between panel and calendar) -->
   <div class="controls-bar">
     <div class="controls-left">
-      <button class="mnav-btn" onclick="changeMonth(-1)">&#8592; Sebelumnya</button>
+      <button class="mnav-btn" id="mnav-prev" onclick="changeMonth(-1)">&#8592; Sebelumnya</button>
       <div class="mnav-label" id="mnav-label">— 2026</div>
-      <button class="mnav-btn" onclick="changeMonth(1)">Berikutnya &#8594;</button>
+      <button class="mnav-btn" id="mnav-next" onclick="changeMonth(1)">Berikutnya &#8594;</button>
     </div>
     <div class="controls-right" id="pdf-btns-wrap">
       <div class="pdf-sep"></div>
@@ -880,6 +882,11 @@ function renderCal(){
   document.getElementById('mnav-label').textContent=label;
   document.getElementById('cal-label').textContent='Kalender '+label+' — klik tanggal untuk detail petugas';
   document.getElementById('hdr-sub').textContent='Menampilkan jadwal: '+label;
+
+  const idx=AVAIL.indexOf(getKey(viewYear,viewMonth));
+  const prevBtn=document.getElementById('mnav-prev'), nextBtn=document.getElementById('mnav-next');
+  if(prevBtn){ prevBtn.disabled = idx<=0; prevBtn.title = prevBtn.disabled ? 'Sudah di bulan paling awal' : ''; }
+  if(nextBtn){ nextBtn.disabled = idx<0 || idx>=AVAIL.length-1; nextBtn.title = nextBtn.disabled ? 'Belum ada jadwal bulan berikutnya' : ''; }
 
   const g=document.getElementById('cal');
   g.innerHTML='';

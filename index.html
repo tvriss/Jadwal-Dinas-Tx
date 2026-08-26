@@ -1001,8 +1001,14 @@ const PDF_LABELS = {
   "2026-5":"Jadwal Mei 2026",
   "2026-6":"Jadwal Juni 2026",
   "2026-7":"Jadwal Juli 2026",
-  "2026-8":"Jadwal Agustus 2026"
+  "2026-8":"Jadwal Agustus 2026",
+  "2026-9":"Jadwal September 2026"
 };
+// Catatan: "2026-9" belum ditambahkan ke PDF_FILES di atas (sengaja) —
+// jadi tombol PDF September akan tampil tapi saat diklik menunjukkan
+// pesan "file belum dikonfigurasi". Setelah PDF-nya siap di-push ke repo,
+// tambahkan baris berikut ke PDF_FILES:
+//   "2026-9": "jadwal-september-2026.pdf",
 /* ================================================================
    INTEGRASI GOOGLE SHEETS (mulai Agustus 2026 dan seterusnya)
    ================================================================
@@ -1051,7 +1057,8 @@ const SHEET_ID = "1n91W7wS1mOtEg5S8c6j1q5kJ98Hy8PrqrAU0AxTfU5s"; // Spreadsheet:
 const CONFIG_TAB = "Config"; // nama tab berisi daftar bulan aktif (opsional tapi disarankan)
 
 const MONTH_SHEETS = [
-  { key:"2026-8", tab:"Agustus26" }, // fallback manual jika tab "Config" belum dibuat
+  { key:"2026-8", tab:"Agustus26" },   // fallback manual jika tab "Config" belum dibuat
+  { key:"2026-9", tab:"September26" }, // ← ganti nama tab di sini kalau nama tab Anda beda
   // Tambahkan baris di sini juga boleh, tapi lebih baik pakai tab "Config"
   // di spreadsheet supaya tidak perlu edit kode tiap bulan.
 ];

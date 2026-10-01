@@ -338,6 +338,12 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
   .controls-bar{flex-direction:column;align-items:flex-start;}
   .modal-cols{grid-template-columns:1fr;}
   .modal{width:96vw;}
+  .tdc.tdc-today{order:-1}
+  .pgrid{grid-template-columns:repeat(3,1fr);gap:7px}
+  .pcb{padding:4px 4px 6px}
+  .pcb span{font-size:10px}
+  .pcb small{font-size:6.5px;letter-spacing:0}
+  .sc .av{width:80px;height:80px}
 }
 
 /* ===== SIDEBAR + LAYOUT BARU ===== */
@@ -350,7 +356,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 .sb-foot{margin-top:auto;font-size:9px;color:var(--text3);padding:10px;line-height:1.6}
 .main{flex:1;min-width:0;padding:14px 22px 22px}
 .view{display:none}.view.active{display:block}
-.tri-day-grid{grid-template-columns:1fr 2.3fr 1fr!important}
+@media(min-width:701px){.tri-day-grid{grid-template-columns:1fr 2.3fr 1fr}}
 /* foto pegawai */
 .av{border-radius:50%;object-fit:cover;background:#2a2e5a;border:2px solid var(--border2);flex-shrink:0;display:block}
 .plist{display:flex;flex-direction:column;gap:5px;margin-top:3px}
@@ -358,14 +364,14 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 .pc .av{width:24px;height:24px;border-width:1px}
 .pc span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* halaman pegawai */
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:12px;margin-top:6px}
-.pcb{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding:8px 8px 10px;border-radius:12px;background:var(--glass-bg2);border:1px solid var(--glass-border);min-width:0}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,108px));gap:10px;margin-top:6px;justify-content:start}
+.pcb{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;padding:6px 6px 8px;border-radius:12px;background:var(--glass-bg2);border:1px solid var(--glass-border);min-width:0}
 .pcb .ph{position:relative;width:100%}
-.pcb .av{width:100%;height:auto;aspect-ratio:3/4;border-radius:9px;border-width:1px;background:linear-gradient(160deg,#3a3f86,#1f2250)}
-.pcb span{font-size:11.5px;font-weight:600;color:var(--text);line-height:1.25;margin-top:4px}
-.pcb small{font-family:'Space Mono',monospace;font-size:8.5px;color:var(--text3);letter-spacing:.01em}
+.pcb .av{width:100%;height:auto;aspect-ratio:3/4;border-radius:8px;border-width:1px;background:linear-gradient(160deg,#3a3f86,#1f2250);transform:translateZ(0);backface-visibility:hidden;image-rendering:auto}
+.pcb span{font-size:10.5px;font-weight:600;color:var(--text);line-height:1.25;margin-top:4px}
+.pcb small{font-family:'Space Mono',monospace;font-size:7.5px;color:var(--text3);letter-spacing:.01em}
 .star{display:inline-flex;align-items:center;justify-content:center;color:#3a2a00;background:linear-gradient(135deg,#f7dc7a,#c9a84c);font-style:normal;box-shadow:0 1px 4px rgba(0,0,0,.35)}
-.ph .star{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;font-size:13px;border:2px solid var(--glass-bg2)}
+.ph .star{position:absolute;top:-6px;right:-6px;width:19px;height:19px;border-radius:50%;font-size:11px;border:2px solid var(--glass-bg2)}
 .pc .star{width:13px;height:13px;border-radius:50%;font-size:8px;flex-shrink:0}
 .tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
 .inp{background:var(--glass-bg2);border:1px solid var(--glass-border);border-radius:8px;color:var(--text);padding:8px 12px;font:13px 'DM Sans',sans-serif;min-width:220px;outline:none}
@@ -1365,7 +1371,7 @@ function avatar(n,size){
   if(size) st.push(`width:${size}px;height:${size}px`);
   st.push(`object-position:${i.pos||'50% 18%'}`);
   const src=i.foto||FOTO_DIR+sl+'.jpg';
-  return `<img class="av" style="${st.join(';')}" data-s="${sl}" data-i="${i.foto?99:0}" src="${src}" alt="${n}" loading="lazy" onerror="imgNext(this)">`;
+  return `<img class="av" style="${st.join(';')}" data-s="${sl}" data-i="${i.foto?99:0}" src="${src}" alt="${n}" loading="lazy" decoding="async" onerror="imgNext(this)">`;
 }
 function nipFmt(x){return x?x.replace(/(\d{8})(\d{6})(\d)(\d{3})/,'$1 $2 $3 $4'):'';}
 function personCard(n,big){

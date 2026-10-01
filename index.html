@@ -357,12 +357,16 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 .pc{display:flex;align-items:center;gap:7px;font-size:9.5px;color:var(--text2);min-width:0}
 .pc .av{width:24px;height:24px;border-width:1px}
 .pc span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin-top:6px}
-.pcb{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;padding:9px 4px;border-radius:10px;background:var(--glass-bg2);border:1px solid var(--glass-border)}
-.pcb .av{width:64px;height:64px}
-.pcb span{font-size:10.5px;font-weight:500;color:var(--text);line-height:1.25}
-.pcb small{font-size:8px;color:var(--text3)}
 /* halaman pegawai */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:12px;margin-top:6px}
+.pcb{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding:8px 8px 10px;border-radius:12px;background:var(--glass-bg2);border:1px solid var(--glass-border);min-width:0}
+.pcb .ph{position:relative;width:100%}
+.pcb .av{width:100%;height:auto;aspect-ratio:3/4;border-radius:9px;border-width:1px;background:linear-gradient(160deg,#3a3f86,#1f2250)}
+.pcb span{font-size:11.5px;font-weight:600;color:var(--text);line-height:1.25;margin-top:4px}
+.pcb small{font-family:'Space Mono',monospace;font-size:8.5px;color:var(--text3);letter-spacing:.01em}
+.star{display:inline-flex;align-items:center;justify-content:center;color:#3a2a00;background:linear-gradient(135deg,#f7dc7a,#c9a84c);font-style:normal;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.ph .star{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;font-size:13px;border:2px solid var(--glass-bg2)}
+.pc .star{width:13px;height:13px;border-radius:50%;font-size:8px;flex-shrink:0}
 .tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
 .inp{background:var(--glass-bg2);border:1px solid var(--glass-border);border-radius:8px;color:var(--text);padding:8px 12px;font:13px 'DM Sans',sans-serif;min-width:220px;outline:none}
 .inp:focus{border-color:var(--toggle-knob)}
@@ -1353,11 +1357,21 @@ const WORK_CODES = ['P','S','M','DL']; // kode yang dihitung sebagai hari kerja
 const SIL = "data:image/svg+xml;utf8,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='#2a2e5a'/><circle cx='50' cy='38' r='18' fill='#7d86c8'/><path d='M14 100c0-24 16-38 36-38s36 14 36 38z' fill='#7d86c8'/></svg>");
 function slug(n){return n.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
 function empInfo(n){return Object.assign({nip:'',status:'',jabatan:'',katim:''},EMP_INFO[n]||{});}
-function avatar(n,size){const i=empInfo(n);return `<img class="av" ${size?`style="width:${size}px;height:${size}px"`:''} src="${i.foto||FOTO_DIR+slug(n)+'.jpg'}" alt="${n}" loading="lazy" onerror="this.onerror=null;this.src=SIL">`;}
+const EXTS=['jpg','png','webp','jpeg'];
+function imgNext(el){const i=+el.dataset.i+1;if(i<EXTS.length){el.dataset.i=i;el.src=FOTO_DIR+el.dataset.s+'.'+EXTS[i];}else{el.onerror=null;el.src=SIL;}}
+// pos (opsional di EMP_INFO) = titik fokus potongan foto, mis. pos:"50% 10%" (x y). Default 50% 18% (condong ke wajah)
+function avatar(n,size){
+  const i=empInfo(n),sl=slug(n),st=[];
+  if(size) st.push(`width:${size}px;height:${size}px`);
+  st.push(`object-position:${i.pos||'50% 18%'}`);
+  const src=i.foto||FOTO_DIR+sl+'.jpg';
+  return `<img class="av" style="${st.join(';')}" data-s="${sl}" data-i="${i.foto?99:0}" src="${src}" alt="${n}" loading="lazy" onerror="imgNext(this)">`;
+}
+function nipFmt(x){return x?x.replace(/(\d{8})(\d{6})(\d)(\d{3})/,'$1 $2 $3 $4'):'';}
 function personCard(n,big){
-  if(!big) return `<div class="pc">${avatar(n)}<span>${n}</span></div>`;
   const i=empInfo(n);
-  return `<div class="pcb">${avatar(n)}<span>${n}</span>${i.jabatan?`<small>${i.jabatan}</small>`:''}</div>`;
+  if(!big) return `<div class="pc">${avatar(n)}<span>${n}</span>${i.katim?`<b class="star" title="${i.katim}">★</b>`:''}</div>`;
+  return `<div class="pcb"><div class="ph">${avatar(n)}${i.katim?`<b class="star" title="${i.katim}">★</b>`:''}</div><span>${n}</span>${i.nip?`<small>${nipFmt(i.nip)}</small>`:''}</div>`;
 }
 function roster(){ // daftar pegawai aktif = bulan terbaru yang punya data
   const k=AVAIL[AVAIL.length-1]; return k&&ALL_SCH[k]?Object.keys(ALL_SCH[k].data).filter(n=>!EXCLUDE_EMP.has(n)):[];

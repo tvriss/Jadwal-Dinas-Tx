@@ -508,7 +508,7 @@ table.rk{width:100%;border-collapse:collapse;font-size:12px}
   <section class="view" id="view-staff">
     <div class="tools"><input class="inp" id="st-q" placeholder="Cari nama / jabatan…" oninput="renderStaff()"><span class="note" id="st-count" style="margin:0"></span></div>
     <div class="staff-grid" id="staff-grid"></div>
-    <div class="note">Foto: simpan di folder <b>assets/foto/</b> dengan nama file sesuai nama pegawai huruf kecil dipisah tanda minus, mis. <b>m-amin-fauzan.jpg</b>. Status &amp; jabatan diisi di variabel <b>EMP_INFO</b> pada kode.</div>
+    <div class="note">Foto: simpan di folder <b>asset/foto/</b> dengan nama file sesuai nama pegawai huruf kecil dipisah tanda minus, mis. <b>m-amin-fauzan.jpg</b>. Status &amp; jabatan diisi di variabel <b>EMP_INFO</b> pada kode.</div>
   </section>
 
   <section class="view" id="view-admin">
@@ -1352,7 +1352,7 @@ const EMP_INFO = {
 };
 // Pegawai yang tidak ditampilkan di Data Pegawai & Administrasi (mis. sudah pensiun)
 const EXCLUDE_EMP = new Set(['Sulaiman']);
-const FOTO_DIR = "assets/foto/";
+const FOTO_DIR = "asset/foto/";
 const WORK_CODES = ['P','S','M','DL']; // kode yang dihitung sebagai hari kerja
 const SIL = "data:image/svg+xml;utf8,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='#2a2e5a'/><circle cx='50' cy='38' r='18' fill='#7d86c8'/><path d='M14 100c0-24 16-38 36-38s36 14 36 38z' fill='#7d86c8'/></svg>");
 function slug(n){return n.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}

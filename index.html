@@ -1191,6 +1191,8 @@ const PDF_FILES = {
   "2026-7": "jadwal-juli-2026.pdf",    // ← file PDF Juli (updated 25 Juli 2026, upload ke repo dengan nama ini)
   "2026-8": "jadwal-agustus-2026.pdf", // ← file PDF Agustus (upload ke repo dengan nama ini)
   "2026-9": "jadwal-september-2026.pdf", // ← file PDF September (pastikan nama file di repo PERSIS sama, huruf besar/kecil ikut diperhitungkan)
+  "2026-10": "jadwal-oktober-2026.pdf",  // ← file PDF Oktober
+  // Bulan yang TIDAK ditulis di sini otomatis memakai pola: jadwal-<bulan>-<tahun>.pdf (huruf kecil), mis. jadwal-november-2026.pdf
 };
 const PDF_LABELS = {
   "2026-4":"Jadwal April 2026",
@@ -1376,8 +1378,14 @@ function renderPdfButton(){
   </button>`;
 }
 
+function pdfPath(key){
+  if(PDF_FILES[key]) return PDF_FILES[key];
+  const [y,m]=key.split('-').map(Number);
+  return `jadwal-${MONTHS_ID[m].toLowerCase()}-${y}.pdf`;
+}
 function openPdf(key){
-  const path=PDF_FILES[key]||'';
+  const base=pdfPath(key);
+  const path=base+'?v='+Math.floor(Date.now()/600000); // cache-bust 10 menit agar PDF terbaru langsung tampil
   const title=PDF_LABELS[key]||'Jadwal PDF';
   document.getElementById('pdf-modal-title').textContent=title;
   const body=document.getElementById('pdf-modal-body');
@@ -1389,6 +1397,7 @@ function openPdf(key){
         </iframe>
         <div id="pdf-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg3);font-size:13px;color:var(--text3);">Memuat PDF...</div>
       </div>`;
+    fetch(base,{method:'HEAD',cache:'no-store'}).then(r=>{ if(!r.ok) body.innerHTML=`<div class="pdf-no-file"><div style="text-align:center;line-height:1.9;max-width:420px"><b style="color:var(--text2)">File PDF tidak ditemukan</b><br>Upload file <b>${base}</b> ke repo GitHub (nama harus persis sama, huruf kecil).</div></div>`; }).catch(()=>{});
     const iframe=body.querySelector('iframe');
     if(iframe){
       iframe.onload=()=>{const ld=document.getElementById('pdf-loading');if(ld)ld.style.display='none';};
